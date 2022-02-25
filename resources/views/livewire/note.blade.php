@@ -90,48 +90,27 @@
                     <div class="shadow overflow-hidden sm:rounded-md">
                         <div class="px-4 py-5 bg-white sm:p-6">
                             <div class="grid grid-cols-6 gap-6">
-
-                        {{--      @if($photos != null)
-                                    <div class="col-span-6 sm:col-span-3">
-                                        <label for="first-name" class="block text-sm font-medium text-gray-700">Adding Photo(s) when save the form.</label>
-                                        <div class="w-full ">
-                                            <div class="flex flex-wrap gap-4">
-                                                @foreach ($photos as $photo)
-                                                    @livewire('note-photo', ['src' => $photo->temporaryUrl()])
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-    --}}
-                        {{--       @if(!$photos) --}}
                                     <div class="col-span-6 sm:col-span-3">
                                         <label for="first-name" class="block text-sm font-medium text-gray-700">Photo</label>
-                                        <div wire:ignore x-data {{--  x-data="" x-on:livewire-upload-finish="$emit('refreshEmit')" --}}>
+                                        <div wire:ignore x-data>
                                             <input type="file"
                                                 class="filepond"
                                                 name="photos"
                                                 id="photos"
                                                 data-allow-reorder="true"
                                                 data-max-file-size="2MB"
-                                                {{-- data-max-files="3" --}}
                                                 wire:model="photos"
                                                 x-ref="input"
                                                 multiple>
-
-
                                                 <script>
-
                                                     $(document).ready(function () {
                                                         document.querySelector('.filepond--credits').remove();
                                                     });
-
                                                     FilePond.registerPlugin(FilePondPluginFileValidateType);
                                                     FilePond.registerPlugin(FilePondPluginFileValidateSize);
                                                     FilePond.registerPlugin(FilePondPluginImagePreview);
                                                     FilePond.registerPlugin(FilePondPluginImageEdit);
                                                     FilePond.registerPlugin(FilePondPluginFilePoster);
-
                                                     const pond = FilePond.create(document.querySelector('input[id=\"photos\"]'), {
                                                         acceptedFileTypes: ['image/*'],
                                                         labelFileTypeNotAllowed: 'Please make sure to upload an image.',
@@ -166,39 +145,25 @@
                                                         ]
 
                                                     });
-                                                    const _process_url = '{{ route('note.upload_photos', $note->id) }}';
-                                                    const _delete_url = '{{ route('note.delete_photo', $note->id) }}';
                                                     FilePond.setOptions({
                                                         server: {
-                                                            /* url: url, */
+                                                            headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
                                                             process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
-                                                                console.log(file);
                                                                 @this.upload('photos', file, load, error, progress)
                                                             },
                                                             revert: (filename, load) => {
                                                                 @this.removeUpload('photos', filename, load)
-
                                                             },
-                                                         /*    load: (src, load) => {
-                                                                console.log(src);
-                                                                fetch(fileSrc).then(res => res.blob()).then(load);
-                                                            }, */
-                                                          /*   onprocessfilerevert: (error, chunk, metadata, load, options) => {
-
-                                                                pond.removeFile(chunk.name);
-                                                            }, */
-                                                            headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-                                                            /* process: _process_url,
-                                                            revert: _delete_url, */
                                                         },
 
                                                     });
 
                                                     pond.onprocessfilerevert = (file) => {
-                                                        console.log(file);
-                                                        file.serverId;
                                                         pond.removeFile(file.id);
                                                     };
+                                                    /* pond.onactivatefile = (file) => {
+                                                        console.log({file});
+                                                    } */
 
 
                                                 </script>

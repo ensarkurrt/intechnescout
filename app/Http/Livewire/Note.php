@@ -37,12 +37,12 @@ class Note extends Component
 
         $this->note = NoteModel::where('team_id', $this->team_id)->where('user_id', auth()->id())->with('photos')->get()->first();
 
-        if ($this->note == null) {
+        if ($this->note == null)
             $this->note = NoteModel::create([
                 'team_id' => $this->team_id,
                 'user_id' => auth()->id(),
             ]);
-        }
+
         $this->weight = $this->note->weight ?? null;
         $this->height = $this->note->height ?? null;
         $this->climb_level = $this->note->climb_level ?? null;
@@ -52,10 +52,6 @@ class Note extends Component
         foreach ($this->note->photos as $photo) {
             $this->shownPhotos[] = $photo->path;
         }
-
-        /* foreach ($this->note->photos as $photo) {
-            $this->shownPhotos[] = $photo->path;
-        } */
     }
 
     protected $rules = [
