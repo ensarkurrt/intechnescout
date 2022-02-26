@@ -22,6 +22,20 @@ class Team extends Model
         return $this->notes()->where('user_id', auth()->id())->first();
     }
 
+    /* public function season_events()
+    {
+        return $this->belongsToMany(SeasonEvents::class, 'season_event_teams');
+    } */
+
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'event_teams')->withPivot('season_id');
+    }
+
+    public function matches()
+    {
+        return $this->belongsToMany(MatchModel::class, 'match_teams');
+    }
 
     public function notes()
     {

@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         return view('home');
     })->name('home');
     Route::get('/note/{teamId}', [NoteController::class, 'detail'])->name('note-detail');
+    Route::get('/api-test', [NoteController::class, 'api_test'])->name('api-test');
     /* Route::post('/upload/{id}', [NoteController::class, 'upload_photos'])->name('note.upload_photos');
     Route::delete('/delete/{id}', [NoteController::class, 'delete_photo'])->name('note.delete_photo'); */
 });
