@@ -31,11 +31,8 @@
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10">
-                                        <img class="h-10 w-10 rounded-full"
-                                            src="{{asset('storage/media/teams/'.$team->number.'.jpg')}}" alt="">
-                                    </div>
 
+                                    @livewire('team-photo',['teamNumber'=> $team->number])
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">

@@ -29,7 +29,7 @@ class Team extends Model
 
     public function events()
     {
-        return $this->belongsToMany(Event::class, 'event_teams')->withPivot('season_id');
+        return $this->belongsToMany(Event::class, 'season_event_teams')->withPivot('season_id');
     }
 
     public function matches()

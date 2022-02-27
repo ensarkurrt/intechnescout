@@ -33,6 +33,6 @@ class Event extends Model
 
     public function seasons()
     {
-        return $this->belongsToMany(Season::class, 'season_events')->withPivot('team_id');
+        return $this->belongsToMany(Season::class, 'season_events');
     }
 }
