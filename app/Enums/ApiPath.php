@@ -8,4 +8,5 @@ class ApiPath
     const SeasonSummary =   '';
     const TeamListing =   'teams';
     const TeamMedia =   'avatars';
+    const EventMatches =   'schedule/';
 }

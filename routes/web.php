@@ -17,17 +17,21 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
+/*
 Route::middleware(['auth:sanctum', 'verified'])->get('/home', function () {
     return view('home');
-})->name('home');
+})->name('home'); */
 
 
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
-    Route::get('/home', function () {
-        return view('home');
-    })->name('home');
+    Route::get('/teams', function () {
+        return view('teams');
+    })->name('teams');
+
+    Route::get('/matches', function () {
+        return view('matches');
+    })->name('matches');
     Route::get('/note/{teamId}', [NoteController::class, 'detail'])->name('note-detail');
     Route::get('/api-test', [NoteController::class, 'api_test'])->name('api-test');
     /* Route::post('/upload/{id}', [NoteController::class, 'upload_photos'])->name('note.upload_photos');

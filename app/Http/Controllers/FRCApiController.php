@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\ApiPath;
 use App\Models\Event;
+use App\Models\MatchModel;
 use App\Models\Season;
 use App\Models\SeasonEvent;
 use App\Models\Team;
@@ -25,7 +26,7 @@ class FRCApiController extends Controller
             'Authorization: Basic ' . base64_encode(env('FRC_API_USERNAME', 'ensarkurt') . ':' . env('FRC_API_KEY', "3324972d-d3a0-447d-9048-b34afc55ffe5")),
             'If-Modified-Since: '
         );
-        self::$season = '2022'/* date("Y") */;
+        self::$season = '2020'/* date("Y") */;
     }
 
     /*
@@ -87,7 +88,17 @@ class FRCApiController extends Controller
         return $parseJson != null && $parseJson == true ? json_decode($response, true) : $response;
     }
 
-    static private function get_images(?array $params): ?array
+    /*
+        * @param array $eventCode: code of specified event
+        * @param array $params: [tournamentLevel = qual | playoff, ?teamNumber, ?start, ?end]
+    */
+    static public function get_event_matches(string $eventCode, ?array $params, ?bool $parseJson = false)
+    {
+        $response = (new self)::send_request(ApiPath::EventMatches . $eventCode, $params);
+        return $parseJson != null && $parseJson == true ? json_decode($response, true) : $response;
+    }
+
+    static public function get_images(?array $params): ?array
     {
         $response = (new self)::send_request(ApiPath::TeamMedia, $params);
         if (!isset($response)) return [];
@@ -100,6 +111,38 @@ class FRCApiController extends Controller
         if ($response['pageCurrent'] < $response['pageTotal'])
             $teams = array_merge($teams, (new self)::get_images(array_merge($params ?? [], ['page' => $response['pageCurrent'] + 1])));
         return $teams;
+    }
+
+    static public function update_event_matches(): void
+    {
+        $season = Season::where('year', (new self)::$season)->get()->first();
+        $events = $season->events;
+        foreach ($events as $event) {
+            $matches = (new self)::get_event_matches($event->code, ['tournamentLevel' => 'qual'], true)['Schedule'];
+            $match_ids = [];
+            foreach ($matches as $match) {
+                $matchModel = MatchModel::where('tournament_level', $match['tournamentLevel'])->where('match_number', $match['matchNumber'])->first();
+                if (!$matchModel)
+                    $matchModel = new MatchModel();
+                /* $matchModel->event_id = $event->id; */
+                $matchModel->match_number = $match['matchNumber'];
+                /* $matchModel->description = $match['description']; */
+                $matchModel->tourtament_level = $match['tournamentLevel'];
+                /* $matchModel->set_alliance_teams($match['alliances']['red']['teamKeys'], $match['alliances']['blue']['teamKeys']);
+                $matchModel->set_alliance_score($match['alliances']['red']['score'], $match['alliances']['blue']['score']); */
+                $matchModel->save();
+                /* $match_ids[] = $matchModel->id; */
+
+                $event->matches->constains($matchModel->id) ?: $event->matches()->attach($matchModel->id, ['season_id' => $season->id, 'start_time' => (new self)::iso_to_date_time($match['startTime'])]);
+            }
+        }
+    }
+
+
+    static public function update_match_teams(array $match): void
+    {
+        foreach ($match["teams"] as $team) {
+        }
     }
 
     /*
@@ -124,8 +167,7 @@ class FRCApiController extends Controller
                 $teamModel->name = $team['nameShort'];
                 $teamModel->save();
                 $team_ids[] = $teamModel->id;
-                if (!$event->teams->contains($teamModel))
-                    $event->teams()->attach($teamModel, ['season_id' => $season->id]);
+                $event->teams->contains($teamModel) ?: $event->teams()->attach($teamModel, ['season_id' => $season->id]);
             }
         }
         if ($includeImages) (new self)::update_team_images();
@@ -171,6 +213,8 @@ class FRCApiController extends Controller
             $eventModel->name = $event['name'];
             $eventModel->type = $event['type'];
             $eventModel->week_number = $event['weekNumber'];
+            $eventModel->start_date = (new self)::iso_to_date_time($event['dateStart']);
+            $eventModel->end_date = (new self)::iso_to_date_time($event['dateEnd']);
             $eventModel->save();
             $event_ids[] = $eventModel->id;
         }
@@ -194,5 +238,10 @@ class FRCApiController extends Controller
         $_season->rookie_start = $response['rookieStart'];
         $_season->event_count = $response['eventCount'];
         $_season->save();
+    }
+
+    static private function iso_to_date_time(string $iso): string
+    {
+        return date('Y-m-d h:i:s', strtotime($iso));
     }
 }

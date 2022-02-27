@@ -13,6 +13,8 @@ class Event extends Model
         'name',
         'code',
         'week_number',
+        'start_date',
+        'end_date',
         'type',
     ];
 
@@ -28,7 +30,7 @@ class Event extends Model
 
     public function matches()
     {
-        return $this->belongsToMany(MatchModel::class, 'event_matches')->withPivot('season_id');
+        return $this->belongsToMany(MatchModel::class, 'season_event_matches');
     }
 
     public function seasons()

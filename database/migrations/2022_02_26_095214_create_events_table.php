@@ -20,6 +20,8 @@ class CreateEventsTable extends Migration
             $table->text('code');
             $table->integer('week_number');
             $table->text('type');
+            $table->timestamp('start_date');
+            $table->timestamp('end_date');
             $table->timestamps();
         });
     }

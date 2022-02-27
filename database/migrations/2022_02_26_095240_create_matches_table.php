@@ -15,6 +15,12 @@ class CreateMatchesTable extends Migration
     {
         Schema::create('matches', function (Blueprint $table) {
             $table->id();
+            /* $table->foreignId('season_id')->references('id')->on('seasons')->onDelete('cascade');
+            $table->foreignId('event_id')->references('id')->on('events')->onDelete('cascade'); */
+            /* $table->text('description'); */
+            $table->text('tournament_level');
+            /* $table->timestamp('start_time'); */
+            $table->integer('match_number');
             $table->timestamps();
         });
     }
