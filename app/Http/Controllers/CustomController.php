@@ -23,6 +23,10 @@ class CustomController extends Controller
         return view('matches', compact('teamId', 'teamNumber'));
     }
 
+    public function teams(){
+        return view('teams');
+    }
+
     public function save_event()
     {
         return view('save-event');

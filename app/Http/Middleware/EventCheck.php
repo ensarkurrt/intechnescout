@@ -18,13 +18,11 @@ class EventCheck
      */
     public function handle(Request $request, Closure $next)
     {
-        Log::critical($request->method(), [$request->path()]);
-
-        $ignoreRoutes = ['login', 'logout', 'register', 'password/reset', 'password/email', 'password/reset/{token}', 'password/reset/{token}/{email}', 'save-note', '/'];
-        if ($request->method() == 'GET' && FRCHelper::get_event_id() == null && !in_array($request->route(), $ignoreRoutes)) {
-            return redirect()->route('save-event');
-        } else {
-            return $next($request);
-        }
+        /*    Log::critical($request->method(), [$request->path(), $request->method()]); */
+        /* if ($request->method() == 'GET') return $next($request);
+        $ignoreRoutes = ['login', 'logout', 'register', 'password/reset', 'password/email', 'password/reset/{token}', 'password/reset/{token}/{email}', 'save-note', '/', ''];
+        if (in_array($request->route(), $ignoreRoutes)) return $next($request); */
+        if (FRCHelper::get_event_id() == null) return redirect()->route('save-event');
+        return $next($request);
     }
 }
