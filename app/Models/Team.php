@@ -34,7 +34,7 @@ class Team extends Model
 
     public function matches()
     {
-        return $this->belongsToMany(MatchModel::class, 'match_teams');
+        return $this->belongsToMany(MatchTeam::class, 'match_teams');
     }
 
     public function notes()

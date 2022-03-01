@@ -24,9 +24,14 @@ class Season extends Model
         return $this->belongsTo(Season::class);
     } */
 
-    public function events()
+    /* public function events()
     {
         return $this->belongsToMany(Event::class, 'season_events');
+    } */
+
+    public function events()
+    {
+        return $this->hasMany(SeasonEvent::class)->with('event');
     }
 
     public function matches()

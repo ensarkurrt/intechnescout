@@ -9,9 +9,10 @@ class MatchModel extends Model
 {
     use HasFactory;
 
+    protected $table = 'matches';
     protected $fillable = [
         /* 'description', */
-        'tourtament_level',
+        'tournament_level',
         'start_time',
         'match_number',
     ];

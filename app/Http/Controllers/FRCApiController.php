@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ApiPath;
+use App\Helpers\FRCHelper;
 use App\Models\Event;
 use App\Models\MatchModel;
 use App\Models\Season;
 use App\Models\SeasonEvent;
+use App\Models\EventTeam;
 use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -26,7 +28,8 @@ class FRCApiController extends Controller
             'Authorization: Basic ' . base64_encode(env('FRC_API_USERNAME', 'ensarkurt') . ':' . env('FRC_API_KEY', "3324972d-d3a0-447d-9048-b34afc55ffe5")),
             'If-Modified-Since: '
         );
-        self::$season = '2020'/* date("Y") */;
+        self::$season = FRCHelper::get_season_year();
+        /* dd(self::$season); */
     }
 
     /*
@@ -118,7 +121,8 @@ class FRCApiController extends Controller
         $season = Season::where('year', (new self)::$season)->get()->first();
         $events = $season->events;
         foreach ($events as $event) {
-            $matches = (new self)::get_event_matches($event->code, ['tournamentLevel' => 'qual'], true)['Schedule'];
+            $matches = (new self)::get_event_matches($event->event->code, ['tournamentLevel' => 'qual'], true)['Schedule'];
+            if ($matches == null || count($matches) == 0) continue;
             $match_ids = [];
             foreach ($matches as $match) {
                 $matchModel = MatchModel::where('tournament_level', $match['tournamentLevel'])->where('match_number', $match['matchNumber'])->first();
@@ -127,24 +131,27 @@ class FRCApiController extends Controller
                 /* $matchModel->event_id = $event->id; */
                 $matchModel->match_number = $match['matchNumber'];
                 /* $matchModel->description = $match['description']; */
-                $matchModel->tourtament_level = $match['tournamentLevel'];
+                $matchModel->tournament_level = $match['tournamentLevel'];
                 /* $matchModel->set_alliance_teams($match['alliances']['red']['teamKeys'], $match['alliances']['blue']['teamKeys']);
                 $matchModel->set_alliance_score($match['alliances']['red']['score'], $match['alliances']['blue']['score']); */
                 $matchModel->save();
-                /* $match_ids[] = $matchModel->id; */
+                $match_ids[] = ['match_id' => $matchModel->id];
 
-                $event->matches->constains($matchModel->id) ?: $event->matches()->attach($matchModel->id, ['season_id' => $season->id, 'start_time' => (new self)::iso_to_date_time($match['startTime'])]);
+                if (!$event->matches()->where('match_id', $matchModel->id)->where('start_time', (new self)::iso_to_date_time($match['startTime']))->exists()) {
+                    $_created_match = $event->matches()->create(["match_id" => $matchModel->id, "start_time" => (new self)::iso_to_date_time($match['startTime'])]);
+                    foreach ($match['teams'] as $team) {
+                        $_team = Team::where('number', $team['teamNumber'])->first();
+                        if ($_team)
+                            $_created_match->teams()->create(['team_id' => $_team->id, 'station' => $team['station']]);
+                    }
+                }
+
+                /* $_created_match->teams()->createMany(); */
+                /* $event->matches->constains($matchModel->id) ?: $event->matches()->attach($matchModel->id, ['season_id' => $season->id, 'start_time' => (new self)::iso_to_date_time($match['startTime'])]); */
             }
+            /* $event->matches()->createMany($match_ids); */
         }
     }
-
-
-    static public function update_match_teams(array $match): void
-    {
-        foreach ($match["teams"] as $team) {
-        }
-    }
-
     /*
         * Update or Create Teams Data. If is there any data, update it. If not, create it.
         * @param bool $includeImages: true if you want to update team images
@@ -154,8 +161,9 @@ class FRCApiController extends Controller
     {
         $season = Season::where('year', (new self)::$season)->get()->first();
         $events = $season->events;
+
         foreach ($events as $event) {
-            $response = self::get_teams(['eventCode' => $event->code], true);
+            $response = self::get_teams(['eventCode' => $event->event->code], true);
             if (!isset($response)) return;
             $teams = $response['teams'];
             $team_ids = [];
@@ -166,9 +174,15 @@ class FRCApiController extends Controller
                 $teamModel->number = $team['teamNumber'];
                 $teamModel->name = $team['nameShort'];
                 $teamModel->save();
-                $team_ids[] = $teamModel->id;
-                $event->teams->contains($teamModel) ?: $event->teams()->attach($teamModel, ['season_id' => $season->id]);
+
+                if (!$event->teams()->where('team_id', $teamModel->id)->exists())
+                    $team_ids[] = ["team_id" => $teamModel->id];
+
+                /* if (EventTeam::where('season_event_id', $current_season->id)->where('event_id', $eventModel->id)->get()->isEmpty())
+                    SeasonEvent::create(['season_id' => $current_season->id, 'event_id' => $eventModel->id]); */
+                /* $event->teams->contains($teamModel) ?: $event->teams()->attach($teamModel, ['season_id' => $season->id]); */
             }
+            $event->teams()->createMany($team_ids);
         }
         if ($includeImages) (new self)::update_team_images();
     }
@@ -216,9 +230,11 @@ class FRCApiController extends Controller
             $eventModel->start_date = (new self)::iso_to_date_time($event['dateStart']);
             $eventModel->end_date = (new self)::iso_to_date_time($event['dateEnd']);
             $eventModel->save();
-            $event_ids[] = $eventModel->id;
+            /*     $event_ids[] = $eventModel->id; */
+            if (SeasonEvent::where('season_id', $current_season->id)->where('event_id', $eventModel->id)->get()->isEmpty())
+                SeasonEvent::create(['season_id' => $current_season->id, 'event_id' => $eventModel->id]);
         }
-        $current_season->events()->syncWithoutDetaching($event_ids);
+        /* $current_season->events()->syncWithoutDetaching($event_ids); */
     }
 
     /*

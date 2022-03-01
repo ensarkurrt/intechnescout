@@ -2,16 +2,19 @@
 
 namespace App\Http\Livewire;
 
+use App\Helpers\FRCHelper;
 use App\Models\Note;
 use App\Models\Season;
 use App\Models\Team;
+use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 
 class Teams extends Component
 {
     public function render()
     {
-        $teams = Season::where('year', date('Y'))->first()->events()->where('code', 'TUIS3')->first()->teams;
+        /* dd(FRCHelper::get_event(null)); */
+        $teams = FRCHelper::get_event(null)->teams;
         return view('livewire.teams', compact('teams'));
     }
 }

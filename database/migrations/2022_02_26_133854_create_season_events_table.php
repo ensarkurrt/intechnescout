@@ -17,6 +17,7 @@ class CreateSeasonEventsTable extends Migration
             $table->id();
             $table->foreignId('season_id')->references('id')->on('seasons')->onDelete('cascade');
             $table->foreignId('event_id')->references('id')->on('events')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

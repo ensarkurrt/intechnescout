@@ -27,6 +27,6 @@ class NoteController extends Controller
     {
         /* FRCApiController::update_season_summary();
         FRCApiController::update_events(); */
-        FRCApiController::update_teams();
+        /* FRCApiController::update_teams(); */
     }
 }

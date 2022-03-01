@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Helpers\FRCHelper;
 use App\Models\NotePhoto;
 use App\Models\Note as NoteModel;
 use App\Models\Team;
@@ -34,13 +35,13 @@ class Note extends Component
 
     public function mount()
     {
-
-        $this->note = NoteModel::where('team_id', $this->team_id)->where('user_id', auth()->id())->with('photos')->get()->first();
+        $this->note = NoteModel::where('team_id', $this->team_id)->where('user_id', auth()->id())->where('season_id', FRCHelper::get_season()->id)->with('photos')->get()->first();
 
         if ($this->note == null)
             $this->note = NoteModel::create([
                 'team_id' => $this->team_id,
                 'user_id' => auth()->id(),
+                'season_id' => FRCHelper::get_season()->id,
             ]);
 
         $this->weight = $this->note->weight ?? null;
@@ -91,12 +92,21 @@ class Note extends Component
             'others' => $this->others,
         ]);
 
+
         if ($this->photos != null)
             $this->save_photo();
 
         if ($this->removedPhotos != null)
             $this->remove_photo();
+
+
+        return session()->flash('message', 'Inspection successfully updated.');
+
+        /* return redirect()->route('note-detail', ['teamId' => $this->team_number]); */
     }
+
+
+
 
     public function remove_photo()
     {
@@ -106,6 +116,12 @@ class Note extends Component
             if (Storage::disk('public')->exists($tempFileName)) {
                 Storage::disk('public')->delete($tempFileName);
                 NotePhoto::where('id', $photo[0])->get()->first()->delete();
+            }
+
+            foreach ($this->shownPhotos as $key => $s_photo) {
+                if ($s_photo == $photo[1]) {
+                    unset($this->shownPhotos[$key]);
+                }
             }
         }
     }
@@ -157,6 +173,7 @@ class Note extends Component
             'path' => $url,
         ]);
 
+        $this->shownPhotos[] = $url;
         /* INFO:: Delete temp image after copy that to local */
         $photo->delete();
         return $url;

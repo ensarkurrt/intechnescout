@@ -76,21 +76,20 @@
 
 
 
-    <div class="mt-10 sm:mt-0">
-        <div class="md:grid md:grid-cols-3 md:gap-6">
-            <div class="md:col-span-1">
-                <div class="px-4 sm:px-0">
-                    <h3 class="text-lg font-medium leading-6 text-gray-900">Robot Information</h3>
-                    <p class="mt-1 text-sm text-gray-600">Fill it with your informations.</p>
-                </div>
-            </div>
+    <div class="py-2">
+        <div class="max-w-7xl mx-auto lg:px-8"">
 
-            <div class="mt-5 md:mt-0 md:col-span-2">
+            <div class=" md:mt-0 md:col-span-4 mx-2">
                 <form wire:submit.prevent="saveNote" enctype="multipart/form-data">
-                    <div class="shadow overflow-hidden sm:rounded-md">
+                    <div class=" overflow-hidden shadow-xl rounded-lg">
                         <div class="px-4 py-5 bg-white sm:p-6">
-                            <div class="grid grid-cols-6 gap-6">
-                                    <div class="col-span-6 sm:col-span-3">
+                            <div class="grid grid-cols-1 gap-6">
+
+                                @if (session()->has('message'))
+                                    @livewire('alert', ['message' => session('message')])
+                                @endif
+
+                                    <div class="col-span-6 sm:col-span-6">
                                         <label for="first-name" class="block text-sm font-medium text-gray-700">Photo</label>
                                         <div wire:ignore x-data>
                                             <input type="file"
@@ -181,14 +180,14 @@
                                     </div>
                                 @endif
     --}}
-                                <div class="col-span-6 sm:col-span-3">
+                                <div class="col-span-6 sm:col-span-1">
                                     <label for="last-name" class="block text-sm font-medium text-gray-700">Weight</label>
                                     <input wire:model="weight" type="text"
                                         class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                    @error('weight') <span class="text-red-500">{{ $message }}</span> @enderror
+                                    @error('weight') <span class="text-red-500 block w-full sm:text-sm">{{ $message }}</span> @enderror
                                 </div>
 
-                                <div class="col-span-6 sm:col-span-4">
+                                <div class="col-span-6 sm:col-span-1">
                                     <label for="email-address" class="block text-sm font-medium text-gray-700">Height
                                     </label>
                                     <input wire:model="height" type="text"
@@ -196,7 +195,7 @@
                                     @error('height') <span class="text-red-500">{{ $message }}</span> @enderror
                                 </div>
 
-                                <div class="col-span-6 sm:col-span-3">
+                                <div class="col-span-6 sm:col-span-1">
                                     <label for="country" class="block text-sm font-medium text-gray-700">Climb Level</label>
                                     <select wire:model="climb_level"
                                         class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -209,7 +208,7 @@
                                     @error('climb_level') <span class="text-red-500">{{ $message }}</span> @enderror
                                 </div>
 
-                                <div class="col-span-6 sm:col-span-3">
+                                <div class="col-span-6 sm:col-span-1">
                                     <label for="country" class="block text-sm font-medium text-gray-700">Shoot Level</label>
                                     <select wire:model="shoot_level"
                                         class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -222,7 +221,7 @@
                                     @error('shoot_level') <span class="text-red-500">{{ $message }}</span> @enderror
                                 </div>
 
-                                <div class="col-span-6">
+                                <div class="col-span-6 sm:col-span-1">
                                     <label for="street-address" class="block text-sm font-medium text-gray-700">Score Per
                                         Match</label>
                                     <input type="text" wire:model="score_per_match"
@@ -230,7 +229,7 @@
                                     @error('score_per_match') <span class="text-red-500">{{ $message }}</span> @enderror
                                 </div>
 
-                                <div class="col-span-6 sm:col-span-6 lg:col-span-2">
+                                <div class="col-span-6 sm:col-span-6 ">
                                     <label for="city" class="block text-sm font-medium text-gray-700">Others</label>
                                     <textarea wire:model="others" rows="3"
                                         class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"

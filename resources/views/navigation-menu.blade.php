@@ -158,11 +158,11 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-jet-responsive-nav-link href="{{ route('teams') }}" :active="request()->routeIs('teams')">
-                {{ __('teams') }}
+                {{ __('Team List') }}
             </x-jet-responsive-nav-link>
 
             <x-jet-responsive-nav-link href="{{ route('matches') }}" :active="request()->routeIs('matches')">
-                {{ __('matches') }}
+                {{ __('Match List') }}
             </x-jet-responsive-nav-link>
         </div>
 

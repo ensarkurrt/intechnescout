@@ -33,8 +33,13 @@ class Event extends Model
         return $this->belongsToMany(MatchModel::class, 'season_event_matches');
     }
 
-    public function seasons()
+    /*  public function seasons()
     {
         return $this->belongsToMany(Season::class, 'season_events');
+    } */
+
+    public function seasons()
+    {
+        return $this->hasMany(SeasonEvent::class)->with('season');
     }
 }
