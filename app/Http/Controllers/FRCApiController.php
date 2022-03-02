@@ -29,7 +29,6 @@ class FRCApiController extends Controller
             'If-Modified-Since: '
         );
         self::$season = FRCHelper::get_season_year(true);
-        /* dd(self::$season); */
     }
 
     /*
@@ -145,18 +144,14 @@ class FRCApiController extends Controller
                             $_created_match->teams()->create(['team_id' => $_team->id, 'station' => $team['station']]);
                     }
                 }
-
-                /* $_created_match->teams()->createMany(); */
-                /* $event->matches->constains($matchModel->id) ?: $event->matches()->attach($matchModel->id, ['season_id' => $season->id, 'start_time' => (new self)::iso_to_date_time($match['startTime'])]); */
             }
-            /* $event->matches()->createMany($match_ids); */
         }
     }
+
     /*
         * Update or Create Teams Data. If is there any data, update it. If not, create it.
         * @param bool $includeImages: true if you want to update team images
     */
-
     static public function update_teams(?bool $includeImages = false): void
     {
         $season = Season::where('year', (new self)::$season)->get()->first();
@@ -177,10 +172,6 @@ class FRCApiController extends Controller
 
                 if (!$event->teams()->where('team_id', $teamModel->id)->exists())
                     $team_ids[] = ["team_id" => $teamModel->id];
-
-                /* if (EventTeam::where('season_event_id', $current_season->id)->where('event_id', $eventModel->id)->get()->isEmpty())
-                    SeasonEvent::create(['season_id' => $current_season->id, 'event_id' => $eventModel->id]); */
-                /* $event->teams->contains($teamModel) ?: $event->teams()->attach($teamModel, ['season_id' => $season->id]); */
             }
             $event->teams()->createMany($team_ids);
         }
@@ -206,8 +197,6 @@ class FRCApiController extends Controller
             }
             $image = base64_decode($team['encodedAvatar']);
             $url = '/storage/' . $base_path  . $file_name;
-            /* file_put_contents(public_path() . $url, $image); */
-
             Storage::disk('public')->put($base_path . $file_name, $image);
         }
     }
@@ -232,11 +221,9 @@ class FRCApiController extends Controller
             $eventModel->start_date = (new self)::iso_to_date_time($event['dateStart']);
             $eventModel->end_date = (new self)::iso_to_date_time($event['dateEnd']);
             $eventModel->save();
-            /*     $event_ids[] = $eventModel->id; */
             if (SeasonEvent::where('season_id', $current_season->id)->where('event_id', $eventModel->id)->get()->isEmpty())
                 SeasonEvent::create(['season_id' => $current_season->id, 'event_id' => $eventModel->id]);
         }
-        /* $current_season->events()->syncWithoutDetaching($event_ids); */
     }
 
     /*

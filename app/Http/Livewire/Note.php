@@ -31,6 +31,8 @@ class Note extends Component
     public $show = true;
     public $removedPhotos = [];
 
+    public $photoCount = 0;
+
 
 
     public function mount()
@@ -42,6 +44,8 @@ class Note extends Component
                 'team_id' => $this->team_id,
                 'user_id' => auth()->id(),
                 'season_event_id' => FRCHelper::get_event_id(),
+                'climb_level' => 0,
+                'shoot_level' => 0,
             ]);
 
         $this->weight = $this->note->weight ?? null;
@@ -51,6 +55,7 @@ class Note extends Component
         $this->score_per_match = $this->note->score_per_match ?? null;
         $this->others = $this->note->others ?? null;
         foreach ($this->note->photos as $photo) {
+            $this->photoCount++;
             $this->shownPhotos[] = $photo->path;
         }
     }
@@ -155,10 +160,12 @@ class Note extends Component
             $photo = NotePhoto::where('path', $fileName)->get()->first();
             if ($photo) {
                 $this->removedPhotos[] = [$photo->id, $photo->path];
+                /* $this->photoCount--; */
             }
         } else
             Storage::disk('lw-tmp')->delete($fileName);
     }
+
 
     /*INFO:: Move images from temp to local */
     private function move_photo($photo)

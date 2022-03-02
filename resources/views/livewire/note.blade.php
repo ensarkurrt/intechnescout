@@ -91,14 +91,14 @@
 
                                     <div class="col-span-6 sm:col-span-6">
                                         <label for="first-name" class="block text-sm font-medium text-gray-700">Photo</label>
+                                        <small class="text-gray-500 font-black text-xs">{{ __('You can upload only 6 photo for each teams.') }}</small>
                                         <div wire:ignore x-data>
                                             <input type="file"
                                                 class="filepond"
                                                 name="photos"
                                                 id="photos"
                                                 data-allow-reorder="true"
-                                                data-max-file-size="2MB"
-                                                wire:model="photos"
+                                                wire:model.defer="photos"
                                                 x-ref="input"
                                                 multiple>
                                                 <script>
@@ -148,15 +148,19 @@
                                                         server: {
                                                             headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
                                                             process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
+                                                                if(@this.photoCount > 4) return abort();
+                                                                @this.photoCount++;
                                                                 @this.upload('photos', file, load, error, progress)
                                                             },
                                                             revert: (filename, load) => {
+                                                                @this.photoCount--;
                                                                 @this.removeUpload('photos', filename, load)
                                                             },
                                                         },
 
                                                     });
                                                     pond.onprocessfilerevert = (file) => {
+                                                        @this.photoCount--;
                                                         pond.removeFile(file.id);
                                                     };
                                                 </script>
@@ -165,7 +169,7 @@
                                     </div>
                                 <div class="col-span-6 sm:col-span-1">
                                     <label for="weight" class="block text-sm font-medium text-gray-700">Weight</label>
-                                    <input wire:model="weight" type="text" name="weight" id="weight"
+                                    <input wire:model.defer="weight" type="text" name="weight" id="weight"
                                         class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                     @error('weight') <span class="text-red-500 block w-full sm:text-sm">{{ $message }}</span> @enderror
                                 </div>
@@ -173,14 +177,14 @@
                                 <div class="col-span-6 sm:col-span-1">
                                     <label for="height" class="block text-sm font-medium text-gray-700">Height
                                     </label>
-                                    <input wire:model="height" type="text" name="height" id="height"
+                                    <input wire:model.defer="height" type="text" name="height" id="height"
                                         class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                     @error('height') <span class="text-red-500">{{ $message }}</span> @enderror
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-1">
                                     <label for="climb_level" class="block text-sm font-medium text-gray-700">Climb Level</label>
-                                    <select wire:model="climb_level" name="climb_level" id="climb_level"
+                                    <select wire:model.defer="climb_level" name="climb_level" id="climb_level"
                                         class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                         <option>0</option>
                                         <option>1</option>
@@ -193,7 +197,7 @@
 
                                 <div class="col-span-6 sm:col-span-1">
                                     <label for="shoot_level" class="block text-sm font-medium text-gray-700">Shoot Level</label>
-                                    <select wire:model="shoot_level" name="shoot_level" id="shoot_level"
+                                    <select wire:model.defer="shoot_level" name="shoot_level" id="shoot_level"
                                         class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                         <option>0</option>
                                         <option>1</option>
@@ -207,7 +211,7 @@
                                 <div class="col-span-6 sm:col-span-1">
                                     <label for="street-score_per_match" class="block text-sm font-medium text-gray-700">Score Per
                                         Match</label>
-                                    <input type="text" wire:model="score_per_match" name="score_per_match" id="score_per_match"
+                                    <input type="text" wire:model.defer="score_per_match" name="score_per_match" id="score_per_match"
                                         class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                     @error('score_per_match') <span class="text-red-500">{{ $message }}</span> @enderror
                                 </div>
