@@ -40,14 +40,12 @@
                             {{-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Admin</td>
                             --}}
                             <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                                <input type="hidden" class="bg-green-500"/>
-                                <input type="hidden" class="bg-red-500"/>
                                 @if ($team->team->isInspected)
                                 <a href="{{route('note-detail',['teamId'=>$team->team->number])}}"
-                                    class="text-white font-bold hover:text-gray-500"><button class="bg-green-500 rounded-lg px-2 py-1">Show Inspect</button></a>
+                                    class="text-white font-bold hover:text-gray-500"><button class="rounded-lg px-2 py-1" style="background-color: rgb(34 197 94 / 1);">Show Inspect</button></a>
                                 @else
                                 <a href="{{route('note-detail',['teamId'=>$team->team->number])}}"
-                                    class="text-white font-bold hover:text-gray-500"><button class="bg-red-500 rounded-lg px-2 py-1">Create Inspect</button></a>
+                                    class="text-white font-bold hover:text-gray-500"><button class="rounded-lg px-2 py-1" style="background-color: rgb(239 68 68 / 1);">Create Inspect</button></a>
                                 @endif
                                 {{-- <a href="{{route('note-detail',['teamId'=>$team->team->number])}}"
                                     class="text-white font-bold hover:text-gray-500"><button class="bg-{{$team->team->isInspected ? 'green' : 'red'}}-500 rounded-lg px-2 py-1">{{$team->team->isInspected ? 'Show' : 'Create'}} Inspect</button></a> --}}
