@@ -117,7 +117,7 @@
                                                         fileValidateTypeDetectType: (source, type) => new Promise((resolve, reject) => {
                                                             resolve(type);
                                                         }),
-                                                        maxFileSize: '2MB',
+                                                        maxFileSize: '10MB',
                                                         labelMaxFileSizeExceeded: 'Image size is too big.',
                                                         labelFileProcessingError: (error) => {
                                                             return 'An error accurated.';
@@ -156,48 +156,31 @@
                                                         },
 
                                                     });
-
                                                     pond.onprocessfilerevert = (file) => {
                                                         pond.removeFile(file.id);
                                                     };
-                                                    /* pond.onactivatefile = (file) => {
-                                                        console.log({file});
-                                                    } */
-
-
                                                 </script>
-
-
                                         </div>
                                         @error('photos.*') <span class="text-red-500">{{ $message }}</span> @enderror
-                                        {{-- <input type="text" name="first-name" id="first-name" autocomplete="given-name"
-                                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                        --}}
                                     </div>
-                            {{--     @else
-                                    <div class="col-span-6 sm:col-span-3">
-                                        <span class="text-red-500">If you want upload more photo, refresh the page.</span>
-                                    </div>
-                                @endif
-    --}}
                                 <div class="col-span-6 sm:col-span-1">
-                                    <label for="last-name" class="block text-sm font-medium text-gray-700">Weight</label>
-                                    <input wire:model="weight" type="text"
+                                    <label for="weight" class="block text-sm font-medium text-gray-700">Weight</label>
+                                    <input wire:model="weight" type="text" name="weight" id="weight"
                                         class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                     @error('weight') <span class="text-red-500 block w-full sm:text-sm">{{ $message }}</span> @enderror
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-1">
-                                    <label for="email-address" class="block text-sm font-medium text-gray-700">Height
+                                    <label for="height" class="block text-sm font-medium text-gray-700">Height
                                     </label>
-                                    <input wire:model="height" type="text"
+                                    <input wire:model="height" type="text" name="height" id="height"
                                         class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                     @error('height') <span class="text-red-500">{{ $message }}</span> @enderror
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-1">
-                                    <label for="country" class="block text-sm font-medium text-gray-700">Climb Level</label>
-                                    <select wire:model="climb_level"
+                                    <label for="climb_level" class="block text-sm font-medium text-gray-700">Climb Level</label>
+                                    <select wire:model="climb_level" name="climb_level" id="climb_level"
                                         class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                         <option>0</option>
                                         <option>1</option>
@@ -209,8 +192,8 @@
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-1">
-                                    <label for="country" class="block text-sm font-medium text-gray-700">Shoot Level</label>
-                                    <select wire:model="shoot_level"
+                                    <label for="shoot_level" class="block text-sm font-medium text-gray-700">Shoot Level</label>
+                                    <select wire:model="shoot_level" name="shoot_level" id="shoot_level"
                                         class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                         <option>0</option>
                                         <option>1</option>
@@ -222,16 +205,16 @@
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-1">
-                                    <label for="street-address" class="block text-sm font-medium text-gray-700">Score Per
+                                    <label for="street-score_per_match" class="block text-sm font-medium text-gray-700">Score Per
                                         Match</label>
-                                    <input type="text" wire:model="score_per_match"
+                                    <input type="text" wire:model="score_per_match" name="score_per_match" id="score_per_match"
                                         class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                     @error('score_per_match') <span class="text-red-500">{{ $message }}</span> @enderror
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-6 ">
-                                    <label for="city" class="block text-sm font-medium text-gray-700">Others</label>
-                                    <textarea wire:model="others" rows="3"
+                                    <label for="others" class="block text-sm font-medium text-gray-700">Others</label>
+                                    <textarea wire:model.defer="others" rows="3" id="others" name="others"
                                         class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
                                         placeholder="Other details about the robot">{{$others}}</textarea>
                                     @error('others') <span class="text-red-500">{{ $message }}</span> @enderror
@@ -240,17 +223,11 @@
                             </div>
                         </div>
                         <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                            {{-- <button type="submit"
-                                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Save</button> --}}
-                                <button wire:loading.attr="disabled" type="submit" class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-white bg-indigo-500 hover:bg-indigo-400 transition ease-in-out duration-150 cursor-not-allowed">
-                                    <div wire:loading.remove>Save</div>
-                                    <div wire:loading>Saving...</div>
-                                </button>
-                                {{-- <div wire:loading.remove class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
-
-                                </div> --}}
-
-                              </div>
+                            <button wire:loading.attr="disabled" type="submit" class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-white bg-indigo-500 hover:bg-indigo-400 transition ease-in-out duration-150 cursor-not-allowed">
+                                <div wire:loading.remove>Save</div>
+                                <div wire:loading>Saving...</div>
+                            </button>
+                        </div>
 
                         </div>
 

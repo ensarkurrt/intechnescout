@@ -61,7 +61,7 @@ class Note extends Component
         'shoot_level' => 'required|numeric|min:0|max:4',
         'climb_level' => 'required|numeric|min:0|max:4',
         'score_per_match' => 'required|numeric|min:0',
-        'others' => 'required|string',
+        /* 'others' => 'required|string', */
         /* 'photos.*' => 'image|max:2048', */
     ];
 
