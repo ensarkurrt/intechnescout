@@ -206,7 +206,9 @@ class FRCApiController extends Controller
             }
             $image = base64_decode($team['encodedAvatar']);
             $url = '/storage/' . $base_path  . $file_name;
-            file_put_contents(public_path() . $url, $image);
+            /* file_put_contents(public_path() . $url, $image); */
+
+            Storage::disk('public')->put($base_path . $file_name, $image);
         }
     }
 
