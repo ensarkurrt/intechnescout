@@ -29,11 +29,11 @@ class FRCHelper
     }
     static function get_event_id()
     {
-        $response = Session::get('event_id', auth()->user() != null ? auth()->user()->event_id : null);
+        $response = Session::get('event_id', null);
         if (!$response) {
-            $response = auth()->user() != null ? auth()->user()->event_id : null;
+            $response = auth()->user() != null ? (auth()->user()->event_id ?? 0) : null;
         }
-        if (!(new self)::get_event($response))
+        if (!((new self)::get_event($response)))
             $response = null;
         return $response;
     }
