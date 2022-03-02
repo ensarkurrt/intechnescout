@@ -39,9 +39,9 @@ class APITest extends Command
     public function handle()
     {
         FRCApiController::update_season_summary();
-   //     FRCApiController::update_events();
- //       FRCApiController::update_teams(true);
-//        FRCApiController::update_event_matches();
+        FRCApiController::update_events();
+        FRCApiController::update_teams(true);
+        FRCApiController::update_event_matches();
 
         /* FRCApiController::test(); */
         /* FRCApiController::update_team_images(); */
