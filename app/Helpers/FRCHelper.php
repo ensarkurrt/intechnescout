@@ -12,7 +12,7 @@ class FRCHelper
     static function get_season()
     {
         $season =  Season::where('year', config('frc.season') ?? date('Y'))->first();
-        if (!$season) return abort(200, 'The WebSite is not configured to use the current season.');
+        if (!$season) return view('errors.no_season');
         return $season;
     }
 
