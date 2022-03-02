@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\FRCHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,7 +20,7 @@ class Team extends Model
 
     public function getNoteAttribute()
     {
-        return $this->notes()->where('user_id', auth()->id())->first();
+        return $this->notes()->where('user_id', auth()->id())->where('season_event_id', FRCHelper::get_event_id())->first();
     }
 
     /* public function season_events()

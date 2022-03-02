@@ -18,7 +18,6 @@ class TeamsSelectOptions extends Component
 
     public function updatedTeamNumber()
     {
-        Log::alert('changed: ' . $this->teamNumber);
         return redirect()->route('matches', ['teamNumber' => $this->teamNumber]);
     }
 }

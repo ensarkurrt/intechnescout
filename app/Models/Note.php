@@ -12,7 +12,7 @@ class Note extends Model
     protected $fillable = [
         'user_id',
         'team_id',
-        'season_id',
+        'season_event_id',
         'weight',
         'height',
         'climb_level',

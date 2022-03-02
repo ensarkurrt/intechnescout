@@ -35,13 +35,13 @@ class Note extends Component
 
     public function mount()
     {
-        $this->note = NoteModel::where('team_id', $this->team_id)->where('user_id', auth()->id())->where('season_id', FRCHelper::get_season()->id)->with('photos')->get()->first();
+        $this->note = NoteModel::where('team_id', $this->team_id)->where('user_id', auth()->id())->where('season_event_id', FRCHelper::get_event_id())->with('photos')->get()->first();
 
         if ($this->note == null)
             $this->note = NoteModel::create([
                 'team_id' => $this->team_id,
                 'user_id' => auth()->id(),
-                'season_id' => FRCHelper::get_season()->id,
+                'season_event_id' => FRCHelper::get_event_id(),
             ]);
 
         $this->weight = $this->note->weight ?? null;
