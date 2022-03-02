@@ -42,8 +42,7 @@ class APITest extends Command
         FRCApiController::update_events();
         FRCApiController::update_teams(true);
         FRCApiController::update_event_matches();
-
+        FRCApiController::update_team_images();
         /* FRCApiController::test(); */
-        /* FRCApiController::update_team_images(); */
     }
 }
