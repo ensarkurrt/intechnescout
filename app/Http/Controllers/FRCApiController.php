@@ -28,7 +28,7 @@ class FRCApiController extends Controller
             'Authorization: Basic ' . base64_encode(env('FRC_API_USERNAME', 'ensarkurt') . ':' . env('FRC_API_KEY', "3324972d-d3a0-447d-9048-b34afc55ffe5")),
             'If-Modified-Since: '
         );
-        self::$season = FRCHelper::get_season_year();
+        self::$season = FRCHelper::get_season_year(true);
         /* dd(self::$season); */
     }
 
