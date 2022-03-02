@@ -17,7 +17,7 @@ class CreateNotesTable extends Migration
             $table->id();
             $table->foreignId('team_id')->references('id')->on('teams')->onDelete('cascade');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('season_id')->references('id')->on('seasons')->onDelete('cascade');
+            $table->foreignId('season_event_id')->references('id')->on('season_events')->onDelete('cascade');
             $table->float('weight')->nullable();
             $table->float('height')->nullable();
             $table->integer('score_per_match')->nullable();

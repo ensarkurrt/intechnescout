@@ -31,17 +31,21 @@ class Note extends Component
     public $show = true;
     public $removedPhotos = [];
 
+    public $photoCount = 0;
+
 
 
     public function mount()
     {
-        $this->note = NoteModel::where('team_id', $this->team_id)->where('user_id', auth()->id())->where('season_id', FRCHelper::get_season()->id)->with('photos')->get()->first();
+        $this->note = NoteModel::where('team_id', $this->team_id)->where('user_id', auth()->id())->where('season_event_id', FRCHelper::get_event_id())->with('photos')->get()->first();
 
         if ($this->note == null)
             $this->note = NoteModel::create([
                 'team_id' => $this->team_id,
                 'user_id' => auth()->id(),
-                'season_id' => FRCHelper::get_season()->id,
+                'season_event_id' => FRCHelper::get_event_id(),
+                'climb_level' => 0,
+                'shoot_level' => 0,
             ]);
 
         $this->weight = $this->note->weight ?? null;
@@ -51,6 +55,7 @@ class Note extends Component
         $this->score_per_match = $this->note->score_per_match ?? null;
         $this->others = $this->note->others ?? null;
         foreach ($this->note->photos as $photo) {
+            $this->photoCount++;
             $this->shownPhotos[] = $photo->path;
         }
     }
@@ -61,7 +66,7 @@ class Note extends Component
         'shoot_level' => 'required|numeric|min:0|max:4',
         'climb_level' => 'required|numeric|min:0|max:4',
         'score_per_match' => 'required|numeric|min:0',
-        'others' => 'required|string',
+        /* 'others' => 'required|string', */
         /* 'photos.*' => 'image|max:2048', */
     ];
 
@@ -155,10 +160,12 @@ class Note extends Component
             $photo = NotePhoto::where('path', $fileName)->get()->first();
             if ($photo) {
                 $this->removedPhotos[] = [$photo->id, $photo->path];
+                /* $this->photoCount--; */
             }
         } else
             Storage::disk('lw-tmp')->delete($fileName);
     }
+
 
     /*INFO:: Move images from temp to local */
     private function move_photo($photo)

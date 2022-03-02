@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\CryptionHelper;
 use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 class CustomController extends Controller
 {
@@ -23,7 +25,8 @@ class CustomController extends Controller
         return view('matches', compact('teamId', 'teamNumber'));
     }
 
-    public function teams(){
+    public function teams()
+    {
         return view('teams');
     }
 

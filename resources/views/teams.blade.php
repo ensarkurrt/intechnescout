@@ -15,7 +15,7 @@
                         <div class="px-4 sm:px-0">
                             <h3 class="text-lg font-medium leading-6 text-gray-900">Teams</h3>
                             <p class="mt-1 text-sm text-gray-600">Teams in Regional</p>
-                            <p class="mt-1 text-sm text-gray-500">Tap button to see private inspect detail</p>
+                            {{-- <p class="mt-1 text-sm text-gray-500">Tap button to see private inspect detail</p> --}}
                         </div>
                     </div>
                     @livewire('teams')

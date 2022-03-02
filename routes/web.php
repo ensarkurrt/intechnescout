@@ -3,6 +3,7 @@
 use App\Http\Controllers\CustomController;
 use App\Http\Controllers\NoteController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 use Laravel\Fortify\Features;
 use Laravel\Jetstream\Jetstream;
 
@@ -18,6 +19,8 @@ use Laravel\Jetstream\Jetstream;
 */
 
 Route::get('/', function () {
+
+    Session::put('salt_key', 'merhaba123');
     return view('welcome');
 });
 /*
