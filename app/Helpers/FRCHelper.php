@@ -9,16 +9,16 @@ use Illuminate\Support\Facades\Session;
 
 class FRCHelper
 {
-    static function get_season()
+    static function get_season(?bool $isConsole = false)
     {
         $season =  Season::where('year', config('frc.season') ?? date('Y'))->first();
-        if (!$season) return abort(404, 'The WebSite is not configured to use the current season.');
+        if (!$season && !$isConsole) return abort(500);
         return $season;
     }
 
-    static function get_season_year(): int
+    static function get_season_year(?bool $isConsole = false): int
     {
-        $season = (new self)::get_season();
+        $season = (new self)::get_season($isConsole);
         if (!$season) return config('frc.season') ?? date('Y');
         return  $season->year;
     }
