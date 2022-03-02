@@ -117,8 +117,8 @@
                                                         fileValidateTypeDetectType: (source, type) => new Promise((resolve, reject) => {
                                                             resolve(type);
                                                         }),
-                                                        maxFileSize: '10MB',
-                                                        labelMaxFileSizeExceeded: 'Image size is too big.',
+                                                        maxFileSize: '5MB',
+                                                        labelMaxFileSizeExceeded: 'Image size must be less than 5MB',
                                                         labelFileProcessingError: (error) => {
                                                             return 'An error accurated.';
                                                         },
