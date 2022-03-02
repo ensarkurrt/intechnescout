@@ -18,11 +18,11 @@ class CreateNotesTable extends Migration
             $table->foreignId('team_id')->references('id')->on('teams')->onDelete('cascade');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('season_event_id')->references('id')->on('season_events')->onDelete('cascade');
-            $table->float('weight')->nullable();
-            $table->float('height')->nullable();
-            $table->integer('score_per_match')->nullable();
-            $table->integer('climb_level')->default(0);
-            $table->integer('shoot_level')->default(0);
+            $table->text('weight')->nullable();
+            $table->text('height')->nullable();
+            $table->text('score_per_match')->nullable();
+            $table->text('climb_level')->nullable();
+            $table->text('shoot_level')->nullable();
             $table->text('others')->nullable();
             $table->timestamps();
         });
