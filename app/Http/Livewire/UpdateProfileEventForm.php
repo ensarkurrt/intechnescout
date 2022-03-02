@@ -29,8 +29,8 @@ class UpdateProfileEventForm extends Component
 
     public function saveEvent()
     {
-        Log::critical('saveEvent');
-        Log::critical('$this->season_event: ' . $this->season_event);
+        /* Log::critical('saveEvent'); */
+        /* Log::critical('$this->season_event: ' . $this->season_event); */
         $user_id = Auth::user()->id;
         $user = User::find($user_id);
         $user->event_id = $this->season_event;
