@@ -3,9 +3,6 @@
 use App\Http\Controllers\CustomController;
 use App\Http\Controllers\NoteController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Session;
-use Laravel\Fortify\Features;
-use Laravel\Jetstream\Jetstream;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,26 +16,15 @@ use Laravel\Jetstream\Jetstream;
 */
 
 Route::get('/', function () {
-
-    Session::put('salt_key', 'merhaba123');
     return view('welcome');
 });
-/*
-Route::middleware(['auth:sanctum', 'verified'])->get('/home', function () {
-    return view('home');
-})->name('home'); */
 
 
+Route::get('/encryption', [CustomController::class, 'encryption_md'])->name('encryption.show');
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
-
-
     Route::get('/save-event', [CustomController::class, 'save_event'])->name('save-event');
-
     Route::get('/teams', [CustomController::class, 'teams'])->name('teams')->middleware(['eventCheck']);
     Route::get('/matches/{teamNumber?}', [CustomController::class, 'matches'])->name('matches')->middleware(['eventCheck']);
     Route::get('/inspection/{teamId}', [NoteController::class, 'detail'])->name('note-detail')->middleware(['eventCheck']);
-    /* Route::get('/api-test', [NoteController::class, 'api_test'])->name('api-test'); */
-    /* Route::post('/upload/{id}', [NoteController::class, 'upload_photos'])->name('note.upload_photos');
-    Route::delete('/delete/{id}', [NoteController::class, 'delete_photo'])->name('note.delete_photo'); */
 });

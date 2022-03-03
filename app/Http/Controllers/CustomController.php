@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\CryptionHelper;
 use App\Models\Team;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Session;
+use Laravel\Jetstream\Jetstream;
+use Illuminate\Support\Str;
 
 class CustomController extends Controller
 {
@@ -33,5 +31,14 @@ class CustomController extends Controller
     public function save_event()
     {
         return view('save-event');
+    }
+
+    public function encryption_md()
+    {
+        $encryptionFile = Jetstream::localizedMarkdownPath('encryption.md');
+
+        return view('encryption', [
+            'encryption' => Str::markdown(file_get_contents($encryptionFile)),
+        ]);
     }
 }
