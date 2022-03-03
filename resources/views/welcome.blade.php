@@ -72,12 +72,12 @@
                         <div class="p-6 border-t border-gray-200 dark:border-gray-700">
                             <div class="flex items-center">
                                 <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-500"><path d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg>
-                                <div class="ml-4 text-lg leading-7 font-semibold text-gray-900 dark:text-white">Privacy</div>
+                                <div class="ml-4 text-lg leading-7 font-semibold text-gray-900 dark:text-white"><a href="{{route('encryption.show')}}" target="_blank">Privacy</a></div>
                             </div>
 
                             <div class="ml-12">
                                 <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Do not be afraid! The notes you keep will be encrypted with a "<b>Salt Key</b>" that you specify. No password other than this password will be able to decrypt this information again. Also, these passwords will be known <b>only</b> to you and will <b>NOT</b> be stored in any way.
+                                    Do not be afraid! The notes you keep will be encrypted with a "<b>Salt Key</b>" that you specify. No password other than this password will be able to decrypt this information again. Also, these passwords will be known <b>only</b> to you and will <b>NOT</b> be stored in any way. <a href="{{route('encryption.show')}}" target="_blank">See More Detail...</a>
                                 </div>
                             </div>
                         </div>

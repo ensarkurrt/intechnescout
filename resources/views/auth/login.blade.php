@@ -28,7 +28,7 @@
             <div class="mt-4">
                 <x-jet-label for="salt_key" value="{{ __('Salt Key') }}" />
                 <x-jet-input id="salt_key" class="block mt-1 w-full" type="password" name="salt_key" required autocomplete="salt_key" />
-                <small class="text-gray-500 font-black text-xs">{{ __('This is the key that will be used to encrypt your data. For anytime, use same key! Otherwise you can\'t read other saved data. Please use used when register!') }}</small>
+                <small class="text-gray-500 font-black text-xs">{{ __('This is the key that will be used to encrypt your data. For anytime, use same key! Otherwise you can\'t read other saved data. Please use used when register!') }} <a href="{{route('encryption.show')}}">See More Detail...</a></small>
             </div>
 
             <div class="block mt-4">
